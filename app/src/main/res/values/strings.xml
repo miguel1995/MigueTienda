@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MigueTienda</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="texto_bienvenida">\n\n\n Bienvenido a la MigueTienda. Aquí podrás adquirir las últimas tendencias en vehículos autónomos. Podrás comprar desde el vehículo más elemental hasta el que tiene todos los accesorios que deseas en tu automóvil. Tenemos proveedores de las mejoras marcas como Tesla, Google, Uber, Neo, entre otros.
+        \n\n\n.</string>
+</resources>

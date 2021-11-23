@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "47046962745",
+    "project_id": "miguetienda-1c11e",
+    "storage_bucket": "miguetienda-1c11e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47046962745:android:37d466e104cdb019a5e7e8",
+        "android_client_info": {
+          "package_name": "com.miatorresch.miguetienda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47046962745-84he9est7u1nvu03uldgvn95q0sfdl63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.miatorresch.miguetienda",
+            "certificate_hash": "1a058daa2f9bba481d54b666e8337e7012c60fbf"
+          }
+        },
+        {
+          "client_id": "47046962745-72nc49cds47a0juksherjja7s7q3hhe3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBeglzYp5i-5S7-oDWf_HWiJHo7pvEHqRw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47046962745-72nc49cds47a0juksherjja7s7q3hhe3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
