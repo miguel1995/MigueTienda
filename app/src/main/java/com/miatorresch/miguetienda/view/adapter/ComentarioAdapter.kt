@@ -18,7 +18,6 @@ class ComentarioAdapter (val comentarioList:List<Comentario>):RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: ComentarioHolder, position: Int) {
-        println(">>> POSITION  ${position}")
         holder.render(comentarioList[position])
     }
 
