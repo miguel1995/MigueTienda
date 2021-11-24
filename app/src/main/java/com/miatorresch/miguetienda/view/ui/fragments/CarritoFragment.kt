@@ -1,21 +1,20 @@
 package com.miatorresch.miguetienda.view.ui.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.miatorresch.miguetienda.R
-import com.miatorresch.miguetienda.model.Comentario
-import com.miatorresch.miguetienda.model.Producto
-import com.miatorresch.miguetienda.view.adapter.ComentarioAdapter
 import com.miatorresch.miguetienda.view.adapter.ProductoAdapter
-import com.miatorresch.miguetienda.viewmodel.ProductosListViewModel
+import com.miatorresch.miguetienda.viewmodel.CarritoListViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,15 +23,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [OrderFragment.newInstance] factory method to
+ * Use the [CarritoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class OrderFragment : Fragment() {
+class CarritoFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private val viewModel:ProductosListViewModel by viewModels()
+    private val viewModel:CarritoListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,50 +39,65 @@ class OrderFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+
+        var sharedPref:SharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        var carrito_ids:String? = sharedPref.getString("carrito_ids", "Default")
+        var carritoIdsArr:List<Int> = listOf()
+
+        if(carrito_ids != "Default"){
+            carritoIdsArr = carrito_ids?.split(',')?.map{it.toInt()}!!
+        }
+
+        println(">>> carritoIdsArr ${carritoIdsArr}")
+
+        viewModel.getProductosByIds(carritoIdsArr)
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        viewModel.getProductos()
-
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_order, container, false)
+        return inflater.inflate(R.layout.fragment_carrito, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        var rvComments = view.findViewById<RecyclerView>(R.id.rvComments)
-        rvComments.layoutManager = GridLayoutManager(requireActivity(),2)
+        var rvProductosCarrito =  view.findViewById<RecyclerView>(R.id.rvProductosCarrito)
+
+        var tvTotal =  view.findViewById<TextView>(R.id.tvTotal)
+        var btnPagar =  view.findViewById<Button>(R.id.btnPagar)
 
 
+        rvProductosCarrito.layoutManager = GridLayoutManager(requireActivity(), 2)
 
         viewModel.productosModel.observe(viewLifecycleOwner){
-            productos->
 
+            productos ->
             val adapter = ProductoAdapter(productos, childFragmentManager)
-            rvComments.adapter = adapter
+            rvProductosCarrito.adapter = adapter
+
+
+            var totalCount = 0
+            productos.forEach { p ->  totalCount += p.precio }
+            tvTotal.text =  "$"+totalCount.toString()
+
         }
 
-        var fab = view.findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
+        btnPagar.setOnClickListener {
             view:View->
-                replaceFragment(CarritoFragment())
-        }
+                    //TODO: redireccionar
 
-
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    private fun replaceFragment(fragment: Fragment){
-        if(fragment != null){
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, fragment)
-            transaction.commit()
+            var sharedPref:SharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+            var editor = sharedPref.edit()
+            editor.remove("carrito_ids")
+            editor.apply()
 
         }
+
     }
 
     companion object {
@@ -93,12 +107,12 @@ class OrderFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment OrderFragment.
+         * @return A new instance of fragment CarritoFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            OrderFragment().apply {
+            CarritoFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

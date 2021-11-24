@@ -38,7 +38,6 @@ class ComentarioAdapter (val comentarioList:List<Comentario>):RecyclerView.Adapt
             tvItemCommentComment.text = comentario.texto
 
 
-
         }
 
     }
