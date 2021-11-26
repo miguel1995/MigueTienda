@@ -113,19 +113,36 @@ class ProductoRepository {
         fun getProductos():List<Producto>{
             //TODO: Consultar todos los productos de Firebase
 
-
-
-
-
-
-
             return productos
         }
 
         fun findByIds(productosIds:List<Int>):List<Producto>{
                 //TODO: Consultar todos los productos del carrito de Firebase
 
-                return productos.filter { p -> productosIds.contains(p.id) }
+                println(">>> IDs de los Productos")
+                println(productosIds)
+
+                var productosFilter:List<Producto> = mutableListOf<Producto>()
+
+                productosIds.forEach {
+
+                        id:Int->
+                        productos.forEach {
+                            p:Producto ->
+                                if(id == p.id){
+
+                                        productosFilter += p
+
+                                }
+                        }
+                }
+
+                println(">>> Productos Filtrados")
+                println(productosFilter)
+
+                //return productos.filter { p -> productosIds.contains(p.id) }
+
+                return productosFilter
         }
 
 
