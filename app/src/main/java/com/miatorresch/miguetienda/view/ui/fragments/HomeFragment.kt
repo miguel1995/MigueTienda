@@ -2,6 +2,7 @@ package com.miatorresch.miguetienda.view.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -37,7 +38,6 @@ class HomeFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -50,10 +50,19 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
 
+        when(item.itemId){
+            R.id.search-> Toast.makeText(requireContext(),"TODO: search", Toast.LENGTH_LONG).show()
+            R.id.filter-> Toast.makeText(requireContext(),"TODO: filter", Toast.LENGTH_LONG).show()
+            R.id.adminFragment-> Toast.makeText(requireContext(),"TODO: adminFragment", Toast.LENGTH_LONG).show()
+            R.id.logOut-> Toast.makeText(requireContext(),"TODO: logOut", Toast.LENGTH_LONG).show()
+
+        }
+
 
         return NavigationUI.
         onNavDestinationSelected(item,requireView().findNavController())
                 || super.onOptionsItemSelected(item)
+
     }
 
     companion object {
