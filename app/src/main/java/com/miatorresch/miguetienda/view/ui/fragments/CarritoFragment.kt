@@ -43,10 +43,10 @@ class CarritoFragment : Fragment() {
 
         var sharedPref:SharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
         var carrito_ids:String? = sharedPref.getString("carrito_ids", "Default")
-        var carritoIdsArr:List<Int> = listOf()
+        var carritoIdsArr:List<String> = listOf()
 
         if(carrito_ids != "Default"){
-            carritoIdsArr = carrito_ids?.split(',')?.map{it.toInt()}!!
+            carritoIdsArr = carrito_ids?.split(',')!!
         }
 
         println(">>> carritoIdsArr ${carritoIdsArr}")

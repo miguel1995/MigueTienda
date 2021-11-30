@@ -29,12 +29,10 @@ class DBHelper (context:FragmentActivity?):SQLiteOpenHelper(context, DATABASE_NA
     }
 
     fun insert(
-
         name:String,
         address:String,
         email:String,
         phone:String
-
     ){
 
         var data = ContentValues()
@@ -73,8 +71,6 @@ class DBHelper (context:FragmentActivity?):SQLiteOpenHelper(context, DATABASE_NA
         db.close()
 
     }
-
-
 
 }
 

@@ -24,14 +24,14 @@ private const val ARG_PARAM2 = "param2"
  */
 class OrderDetailDialogFragment : DialogFragment() {
 
-    private var id:Int? = null
+    private var id:String? = null
     private var nombre:String? = null
     private var precio:Int? = null
     private var descripcion:String? = null
     private var imageUrl:String? = null
 
     fun newInstance(
-        id:Int,
+        id:String,
         nombre:String,
         precio:Int,
         descripcion:String,
@@ -40,7 +40,7 @@ class OrderDetailDialogFragment : DialogFragment() {
         val f = OrderDetailDialogFragment()
 
         val args = Bundle()
-        args.putInt("id", id)
+        args.putString("id", id)
         args.putString("nombre", nombre)
         args.putInt("precio", precio)
         args.putString("descripcion", descripcion)
@@ -57,7 +57,7 @@ class OrderDetailDialogFragment : DialogFragment() {
 
 
         arguments?.let {
-            id = it.getInt("id")
+            id = it.getString("id")
             nombre = it.getString("nombre")
             precio = it.getInt("precio")
             descripcion = it.getString("descripcion")

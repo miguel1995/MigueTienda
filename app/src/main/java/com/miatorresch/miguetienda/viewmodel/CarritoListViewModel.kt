@@ -15,7 +15,7 @@ class CarritoListViewModel:ViewModel() {
         productoRepository = ProductoRepository()
     }
 
-    fun getProductosByIds(productosIds:List<Int>){
+    fun getProductosByIds(productosIds:List<String>){
         var currentProductoList =  productoRepository.findByIds(productosIds)
         productosModel.postValue(currentProductoList)
     }
