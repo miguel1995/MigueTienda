@@ -1,11 +1,17 @@
 package com.miatorresch.miguetienda.view.ui.fragments
 
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import com.miatorresch.miguetienda.R
+import com.miatorresch.miguetienda.databinding.FragmentAdminDetailDialogBinding
+import com.miatorresch.miguetienda.model.DBHelper
+import com.miatorresch.miguetienda.model.Tables
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,17 +23,55 @@ private const val ARG_PARAM2 = "param2"
  * Use the [AdminDetailDialogFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AdminDetailDialogFragment : Fragment() {
+class AdminDetailDialogFragment : DialogFragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var nombre:String
+    private lateinit var direccion:String
+    private lateinit var telefono:String
+    private lateinit var correo:String
+
+    private lateinit var informacionDBHelper:DBHelper
+
+
+    fun newInstace(
+        nombre:String,
+        direccion:String,
+        telefono:String,
+        correo:String,
+    ):AdminDetailDialogFragment{
+
+        val f = AdminDetailDialogFragment()
+
+        val args = Bundle()
+        args.putString("nombre", nombre)
+        args.putString("direccion", direccion)
+        args.putString("telefono", telefono)
+        args.putString("correo", correo)
+
+        f.arguments = args
+
+        return f
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            nombre = it.getString("nombre").toString()
+            direccion = it.getString("direccion").toString()
+            telefono = it.getString("telefono").toString()
+            correo = it.getString("correo").toString()
         }
+
+        informacionDBHelper = DBHelper(requireActivity())
+
+
+
     }
 
     override fun onCreateView(
@@ -37,6 +81,68 @@ class AdminDetailDialogFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_admin_detail_dialog, container, false)
     }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        var binding = FragmentAdminDetailDialogBinding.bind(view)
+
+        binding.ibPhotoAdmin.setImageResource(R.mipmap.ic_launcher)
+        binding.etNameAdmin.setText(nombre)
+        binding.etAddress.setText(direccion)
+        binding.etPhone.setText(telefono)
+        binding.etEmail.setText(correo)
+
+        binding.btnSaveAdmin.setOnClickListener {
+
+            if(binding.etNameAdmin.text.isNotEmpty() &&
+            binding.etAddress.text.isNotEmpty() &&
+            binding.etPhone.text.isNotEmpty() &&
+            binding.etEmail.text.isNotEmpty()){
+
+                informacionDBHelper.edit(
+                    1,
+                    binding.etNameAdmin.text.toString(),
+                    binding.etAddress.text.toString(),
+                    binding.etPhone.text.toString(),
+                    binding.etEmail.text.toString()
+                )
+
+
+                Toast.makeText(requireContext(), "Se guardaron los datos", Toast.LENGTH_LONG).show()
+
+                binding.etNameAdmin.text.clear()
+                binding.etAddress.text.clear()
+                binding.etPhone.text.clear()
+                binding.etEmail.text.clear()
+
+                val db: SQLiteDatabase = informacionDBHelper.readableDatabase
+                val cursor = db.rawQuery("SELECT * FROM " + Tables.information["TABLE_NAME"], null)
+
+                if(cursor.moveToFirst()){
+                    do{
+                        binding.etNameAdmin.setText(cursor.getString(1).toString())
+                        binding.etAddress.setText(cursor.getString(2).toString())
+                        binding.etPhone.setText(cursor.getString(3).toString())
+                        binding.etEmail.setText(cursor.getString(4).toString())
+                    }while (cursor.moveToNext())
+
+                }
+
+                dismiss()
+
+            }else{
+                Toast.makeText(requireContext(), "Error al guardar", Toast.LENGTH_LONG).show()
+
+            }
+
+
+        }
+
+    }
+
+
 
     companion object {
         /**
