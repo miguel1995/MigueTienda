@@ -82,6 +82,9 @@ dependencies {
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+
 
 
 }

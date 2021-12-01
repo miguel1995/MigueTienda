@@ -5,11 +5,12 @@ data class Producto (
     var nombre:String,
     var precio:Int,
     var descripcion:String,
-    var imageUrl:String
+    var imageUrl:String,
+    var inventario:Int
 ){
 
     constructor() : this(
-    "","",0,"",""
+    "","",0,"","", 0
     ) {}
 
 }

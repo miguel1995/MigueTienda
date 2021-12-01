@@ -29,6 +29,7 @@ class OrderDetailDialogFragment : DialogFragment() {
     private var precio:Int? = null
     private var descripcion:String? = null
     private var imageUrl:String? = null
+    private var inventario:Int? = null
 
     fun newInstance(
         id:String,
@@ -36,6 +37,7 @@ class OrderDetailDialogFragment : DialogFragment() {
         precio:Int,
         descripcion:String,
         imageUrl:String,
+        inventario:Int,
     ): OrderDetailDialogFragment{
         val f = OrderDetailDialogFragment()
 
@@ -45,6 +47,7 @@ class OrderDetailDialogFragment : DialogFragment() {
         args.putInt("precio", precio)
         args.putString("descripcion", descripcion)
         args.putString("imageUrl", imageUrl)
+        args.putInt("inventario", inventario)
 
         f.arguments = args
 
@@ -62,6 +65,7 @@ class OrderDetailDialogFragment : DialogFragment() {
             precio = it.getInt("precio")
             descripcion = it.getString("descripcion")
             imageUrl = it.getString("imageUrl")
+            inventario = it.getInt("inventario")
         }
     }
 

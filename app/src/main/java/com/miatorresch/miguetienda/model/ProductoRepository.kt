@@ -3,6 +3,7 @@ package com.miatorresch.miguetienda.model
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -10,7 +11,9 @@ class ProductoRepository {
 
 
         val db = Firebase.firestore
-
+        val docRef = db.collection("productos")
+        private var productos = listOf<Producto>()
+/*
         private var productos = listOf(
 
                 Producto(
@@ -117,11 +120,11 @@ class ProductoRepository {
 
 
                 )
-
+*/
 
         fun getProductos( mutableLiveData: MutableLiveData<List<Producto>> ){
 
-
+/* OPCION 1
                 db.collection("productos")
                         .get()
                         .addOnSuccessListener { result ->
@@ -147,39 +150,87 @@ class ProductoRepository {
                         .addOnFailureListener { exception ->
                                 Log.w(TAG, "Error getting documents.", exception)
                         }
+*/
 
+                /*
+                *
+                * OPCION 2
+                * */
+
+                docRef.addSnapshotListener { snapshot, e ->
+                        if (e != null) {
+                                Log.w(TAG, "Listen failed.", e)
+                                return@addSnapshotListener
+                        }
+
+                        if (snapshot != null && !snapshot.isEmpty) {
+
+                                productos = listOf()
+                                for (document in snapshot.documents) {
+
+                                        var producto = document.toObject(Producto::class.java)
+
+                                        if(producto != null){
+                                                producto.id = document.id
+                                                productos += producto
+                                        }
+
+                                }
+                                mutableLiveData.postValue(productos)
+
+                        } else {
+                                Log.d(TAG, "Current data: null")
+                        }
+                }
 
 
         }
 
-        fun findByIds(productosIds:List<String>):List<Producto>{
-                //TODO: Consultar todos los productos del carrito de Firebase
+        fun findByIds(productosIds:List<String>, mutableLiveData: MutableLiveData<List<Producto>>):List<Producto>{
 
                 println(">>> IDs de los Productos")
                 println(productosIds)
 
                 var productosFilter:List<Producto> = mutableListOf<Producto>()
 
-                productosIds.forEach {
+                if(!productosIds.isEmpty()){
 
-                        id:String ->
-                        productos.forEach {
-                            p:Producto ->
-                                if(id == p.id){
+                        docRef.whereIn(FieldPath.documentId(), productosIds).addSnapshotListener { snapshot, e ->
+                                if (e != null) {
+                                        Log.w(TAG, "Listen failed.", e)
+                                        return@addSnapshotListener
+                                }
 
-                                        productosFilter += p
+                                if (snapshot != null && !snapshot.isEmpty) {
 
+                                        productosFilter = listOf()
+                                        for (document in snapshot.documents) {
+
+                                                var producto = document.toObject(Producto::class.java)
+
+                                                if(producto != null){
+                                                        producto.id = document.id
+                                                        productosFilter += producto
+                                                }
+
+                                        }
+
+                                        mutableLiveData.postValue(productosFilter)
+
+                                } else {
+                                        Log.d(TAG, "Current data: null")
                                 }
                         }
+
+
                 }
-
-                println(">>> Productos Filtrados")
-                println(productosFilter)
-
-                //return productos.filter { p -> productosIds.contains(p.id) }
 
                 return productosFilter
         }
 
+        fun decrementarInventario(){
+                //TODO Decrementar Inventario en Firebase
+
+        }
 
 }

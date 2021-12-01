@@ -36,11 +36,13 @@ class ProductoAdapter (val productoList:List<Producto>, val fragmentManager:Frag
             var ivImage = view.findViewById<ImageView>(R.id.ivImage)
             var tvName = view.findViewById<TextView>(R.id.tvName)
             var tvCost = view.findViewById<TextView>(R.id.tvCost)
+            var tvInventario = view.findViewById<TextView>(R.id.tvInventario)
 
 
             ivImage.setImageResource(R.mipmap.ic_launcher)
             tvName.text = producto.nombre
-            tvCost.text = producto.precio.toString()
+            tvCost.text = "$" + producto.precio.toString()
+            tvInventario.text = producto.inventario.toString() + " Unid"
 
             cardView.setOnClickListener {
                 view:View ->
@@ -49,12 +51,11 @@ class ProductoAdapter (val productoList:List<Producto>, val fragmentManager:Frag
                         producto.nombre,
                         producto.precio,
                         producto.descripcion,
-                        producto.imageUrl
+                        producto.imageUrl,
+                        producto.inventario
                     )
                     dialogFragment.show(fragmentManager, "prueba")
             }
-
-
 
         }
 

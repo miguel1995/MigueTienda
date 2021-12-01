@@ -91,6 +91,8 @@ class CarritoFragment : Fragment() {
             view:View->
                     //TODO: redireccionar
 
+
+            //Limpia productos del carrito
             var sharedPref:SharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
             var editor = sharedPref.edit()
             editor.remove("carrito_ids")
