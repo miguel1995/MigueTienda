@@ -2,7 +2,10 @@ package com.miatorresch.miguetienda.view.ui.fragments
 
 import android.content.DialogInterface
 import android.database.sqlite.SQLiteDatabase
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +33,7 @@ class AdminFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var informacionDBHelper: DBHelper
+    private lateinit var stringBase64:String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,11 +54,10 @@ class AdminFragment : Fragment() {
                 "dirección",
                 "email@ejemplo.com",
                 "teléfono",
+                "base64"
             )
 
         }
-
-
 
     }
 
@@ -83,10 +86,18 @@ class AdminFragment : Fragment() {
         if(cursor.moveToFirst()){
             do{
                 binding.etNameAdmin.setText(cursor.getString(1).toString())
-                println(">> ${cursor.getString(1).toString()}  ")
                 binding.etAddress.setText(cursor.getString(2).toString())
                 binding.etPhone.setText(cursor.getString(3).toString())
                 binding.etEmail.setText(cursor.getString(4).toString())
+
+                stringBase64 = cursor.getString(5).toString()
+                var imageBytes = Base64.decode(stringBase64, Base64.DEFAULT)
+                var decodeImge = BitmapFactory.decodeByteArray(imageBytes,0, imageBytes.size)
+
+                binding.ibPhotoAdmin.setImageBitmap(decodeImge)
+
+
+
             }while (cursor.moveToNext())
 
         }
@@ -105,7 +116,8 @@ class AdminFragment : Fragment() {
                 nombre,
                 direccion,
                 telefono,
-                correo
+                correo,
+                stringBase64
             )
             dialogFragment.show(childFragmentManager, "AdminDetailDialogFragment")
 

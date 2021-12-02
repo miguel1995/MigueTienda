@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.miatorresch.miguetienda.R
 import com.miatorresch.miguetienda.model.Producto
 import com.miatorresch.miguetienda.view.ui.fragments.OrderDetailDialogFragment
+import com.squareup.picasso.Picasso
 
 class ProductoAdapter (val productoList:List<Producto>, val fragmentManager:FragmentManager):RecyclerView.Adapter<ProductoAdapter.ProductoHolder>() {
 
@@ -39,7 +40,9 @@ class ProductoAdapter (val productoList:List<Producto>, val fragmentManager:Frag
             var tvInventario = view.findViewById<TextView>(R.id.tvInventario)
 
 
-            ivImage.setImageResource(R.mipmap.ic_launcher)
+            //ivImage.setImageResource(R.mipmap.ic_launcher)
+            Picasso.get().load(producto.imageUrl).into(ivImage);
+
             tvName.text = producto.nombre
             tvCost.text = "$" + producto.precio.toString()
             tvInventario.text = producto.inventario.toString() + " Unid"

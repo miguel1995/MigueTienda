@@ -11,7 +11,8 @@ class Tables {
             "_nombre" to "nombre",
             "_direccion" to "direccion",
             "_correo" to "correo",
-            "_telefono" to "telefono"
+            "_telefono" to "telefono",
+            "_stringBase64" to "stringBase64"
 
         )
 

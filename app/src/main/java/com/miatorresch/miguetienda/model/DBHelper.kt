@@ -19,7 +19,8 @@ class DBHelper (context:FragmentActivity?):SQLiteOpenHelper(context, DATABASE_NA
                 Tables.information["_nombre"] + " TEXT NOT NULL, " +
                 Tables.information["_direccion"] + " TEXT NOT NULL, " +
                 Tables.information["_telefono"] + " TEXT NOT NULL, " +
-                Tables.information["_correo"] + " TEXT NOT NULL " + ")"
+                Tables.information["_correo"] + " TEXT NOT NULL, " +
+                Tables.information["_stringBase64"] + " TEXT NOT NULL " + ")"
 
         )
     }
@@ -32,7 +33,8 @@ class DBHelper (context:FragmentActivity?):SQLiteOpenHelper(context, DATABASE_NA
         name:String,
         address:String,
         email:String,
-        phone:String
+        phone:String,
+        stringBase64:String
     ){
 
         var data = ContentValues()
@@ -41,6 +43,7 @@ class DBHelper (context:FragmentActivity?):SQLiteOpenHelper(context, DATABASE_NA
         data.put(Tables.information["_direccion"], address)
         data.put(Tables.information["_correo"], email)
         data.put(Tables.information["_telefono"], phone)
+        data.put(Tables.information["_stringBase64"], stringBase64)
 
         var db = this.writableDatabase
         db.insert(Tables.information["TABLE_NAME"],null, data)
@@ -53,8 +56,8 @@ class DBHelper (context:FragmentActivity?):SQLiteOpenHelper(context, DATABASE_NA
         name:String,
         address:String,
         email:String,
-        phone:String
-
+        phone:String,
+        stringBase64:String
     ){
 
         var args= arrayOf(id.toString())
@@ -64,6 +67,7 @@ class DBHelper (context:FragmentActivity?):SQLiteOpenHelper(context, DATABASE_NA
         data.put(Tables.information["_direccion"], address)
         data.put(Tables.information["_correo"], email)
         data.put(Tables.information["_telefono"], phone)
+        data.put(Tables.information["_stringBase64"], stringBase64)
 
         var db = this.writableDatabase
 
