@@ -6,6 +6,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.miatorresch.miguetienda.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -18,7 +24,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [homeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnMapReadyCallback {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -65,6 +71,15 @@ class HomeFragment : Fragment() {
 
     }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -83,5 +98,25 @@ class HomeFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        var name = "Tienda Don Emilio"
+        var address = "Rionegro, Antioquia"
+        var latitude = 4.636107
+        var longitude = -74.0848331
+        var zoom = 15f
+
+        var centerMap = LatLng(latitude, longitude)
+        p0?.animateCamera(CameraUpdateFactory.newLatLngZoom(centerMap, zoom))
+
+
+        val marker = p0.addMarker(
+            MarkerOptions()
+                .title(name)
+                .position(centerMap)
+        )
+
+
     }
 }
