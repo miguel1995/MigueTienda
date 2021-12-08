@@ -233,4 +233,38 @@ class ProductoRepository {
 
         }
 
+        fun getProductoByBarCode(mutableLiveData: MutableLiveData<Producto>, codBar:String){
+                var producto:Producto = Producto()
+
+
+                docRef.whereEqualTo("cod_barras", codBar).addSnapshotListener { snapshot, e ->
+                        if (e != null) {
+                                Log.w(TAG, "Listen failed.", e)
+                                return@addSnapshotListener
+
+                        }
+
+                        if (snapshot != null && !snapshot.isEmpty) {
+
+
+                                for (document in snapshot.documents) {
+
+                                        if(document != null){
+
+                                                producto = document.toObject(Producto::class.java)!!
+
+                                        }
+
+                                }
+                                mutableLiveData.postValue(producto)
+
+                        } else {
+                                Log.d(TAG, "Current data: null")
+                        }
+                }
+
+
+
+        }
+
 }

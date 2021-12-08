@@ -3,6 +3,7 @@ package com.miatorresch.miguetienda.view.ui.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -13,6 +14,17 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.miatorresch.miguetienda.R
+import com.journeyapps.barcodescanner.ScanOptions
+
+import com.journeyapps.barcodescanner.ScanContract
+
+import androidx.activity.result.ActivityResultLauncher
+import androidx.fragment.app.viewModels
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.miatorresch.miguetienda.model.Producto
+import com.miatorresch.miguetienda.view.adapter.ProductoAdapter
+import com.miatorresch.miguetienda.viewmodel.ProductosListViewModel
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +40,9 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val viewModel: ProductosListViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +72,14 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
 
         when(item.itemId){
+
+            R.id.scan-> {
+
+                Toast.makeText(requireContext(), "TODO: SCAN", Toast.LENGTH_LONG).show()
+                barcodeLauncher.launch(ScanOptions())
+
+
+            }
             R.id.search-> Toast.makeText(requireContext(),"TODO: search", Toast.LENGTH_LONG).show()
             R.id.filter-> Toast.makeText(requireContext(),"TODO: filter", Toast.LENGTH_LONG).show()
             R.id.adminFragment-> Toast.makeText(requireContext(),"TODO: adminFragment", Toast.LENGTH_LONG).show()
@@ -65,11 +88,58 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
 
-        return NavigationUI.
-        onNavDestinationSelected(item,requireView().findNavController())
-                || super.onOptionsItemSelected(item)
+        return true
 
     }
+
+
+    // Register the launcher and result handler
+    private val barcodeLauncher = registerForActivityResult(
+        ScanContract()
+    ) { result: ScanIntentResult ->
+        if (result.contents == null) {
+
+            Toast.makeText(requireActivity(), "Cancelled", Toast.LENGTH_LONG).show()
+
+        } else {
+
+            Toast.makeText(
+                requireActivity(),
+                "Scanned: " + result.contents,
+                Toast.LENGTH_LONG
+            ).show()
+
+
+            var producto:Producto
+
+            viewModel.getProductoByBarCode(result.contents)
+            viewModel.productoModel.observe(viewLifecycleOwner){
+                    producto->
+                        println(">>>> PRODUCTO")
+                        println(producto)
+
+                var barCodeFragment = BarCodeDetailDialogFragment().newInstance(
+
+                    producto.id,
+                    producto.nombre,
+                    producto.precio,
+                    producto.descripcion,
+                    producto.imageUrl,
+                    producto.inventario,
+                    producto.cod_barras
+
+                )
+
+                barCodeFragment.show(childFragmentManager, "BarCodeDetailDialogFragment")
+
+
+
+            }
+
+        }
+    }
+
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

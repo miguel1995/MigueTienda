@@ -11,12 +11,20 @@ class ProductosListViewModel:ViewModel() {
     var productoRepository: ProductoRepository
     var productosModel = MutableLiveData<List<Producto>>()
 
+    var productoModel = MutableLiveData<Producto>()
+
     init {
         productoRepository = ProductoRepository()
     }
 
     fun getProductos(){
         var currentProductoList =  productoRepository.getProductos(productosModel)
+
+    }
+
+    fun getProductoByBarCode(codeBar:String){
+
+        productoRepository.getProductoByBarCode(productoModel, codeBar)
 
     }
 
